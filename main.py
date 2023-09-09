@@ -38,10 +38,12 @@ def main():
                 for st in station_list:
                     # 稀にIdが空（SubIdはある）Stationがヒットする（鉄道駅ではなく港など？）のでその場合は無視．
                     if 'Id' in st:
-                        # ['店舗ID', '店舗名称', '駅ID', '駅名']の形式でデータフレームに追加
-                        data = [{'店舗ID': shop_id, '店舗名':shop_name, '駅ID':st['Id'], '駅名':st['Name']}]
-                        tmp_df = pd.DataFrame(data)
-                        df = pd.concat([df, tmp_df])
+                        # 駅から徒歩3分以内の場合のみ対象とする
+                        if int(st['Time']) <= 3:
+                            # ['店舗ID', '店舗名称', '駅ID', '駅名']の形式でデータフレームに追加
+                            data = [{'店舗ID': shop_id, '店舗名':shop_name, '駅ID':st['Id'], '駅名':st['Name']}]
+                            tmp_df = pd.DataFrame(data)
+                            df = pd.concat([df, tmp_df])
     
     # 重複データを削除する
     df = df.drop_duplicates()
@@ -50,8 +52,9 @@ def main():
     # 駅IDのID別出現回数
     st_cnt = df['駅名'].value_counts()
     print(st_cnt)
- 
-    
+
+    # 荻窪駅から3分以内にあるココカラファイン
+    print(df[df["駅名"]=="荻窪"])    
 
 
 # Yahooローカルサーチに対してGETリクエストを発行し，そのレスポンスを返す変数．
