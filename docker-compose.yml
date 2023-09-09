@@ -3,7 +3,8 @@ services:
  python:
    container_name: cocokara-cluster
    build: .
-   command: python3 main.py
    working_dir: /code
+   command: python main.py
+   tty: true
    volumes:
      - .:/code
